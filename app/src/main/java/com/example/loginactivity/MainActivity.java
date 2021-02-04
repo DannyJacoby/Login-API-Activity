@@ -16,10 +16,13 @@ import android.widget.TextView;
 import com.example.loginactivity.db.AppDatabase;
 import com.example.loginactivity.db.UserDAO;
 import com.google.android.material.snackbar.Snackbar;
+import com.google.gson.Gson;
 
 import java.util.List;
 
 import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
@@ -54,8 +57,88 @@ public class MainActivity extends AppCompatActivity {
 
         loginUser(mUserId);
 
-        refreshDisplay();
+        if(mUserId != -1){
+            refreshWelcome();
+            callAllPosts();
+//            callAllPostsByPostsId();
+        }
 
+    }
+
+    private void callAllPostsByPostsId(){
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("https://jsonplaceholder.typicode.com/")
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+
+        JsonPlaceHolderAPI jsonPlaceHolderAPI = retrofit.create(JsonPlaceHolderAPI.class);
+
+        Call<List<Post>> call = jsonPlaceHolderAPI.getPostsByPostId(mUserId);
+
+        call.enqueue(new Callback<List<Post>>() {
+            @Override
+            public void onResponse(Call<List<Post>> call, Response<List<Post>> response) {
+                if(!response.isSuccessful()){
+                    mMainDisplay.setText("Code: " + response.code());
+                    return;
+                }
+
+                List<Post> posts = response.body();
+
+                for(Post post : posts){
+                    String content = "";
+                    content += "ID: " + post.getId() + "\n";
+                    content += "User ID: " + post.getUserId() + "\n";
+                    content += "Title: " + post.getTitle() + "\n";
+                    content += "Text: " + post.getText() + "\n\n";
+                    mMainDisplay.append(content);
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<List<Post>> call, Throwable t) {
+                mMainDisplay.setText(t.getMessage());
+            }
+        });
+    }
+
+    private void callAllPosts(){
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("https://jsonplaceholder.typicode.com/")
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+
+        JsonPlaceHolderAPI jsonPlaceHolderAPI = retrofit.create(JsonPlaceHolderAPI.class);
+
+        Call<List<Post>> call = jsonPlaceHolderAPI.getAllPosts();
+
+        call.enqueue(new Callback<List<Post>>() {
+            @Override
+            public void onResponse(Call<List<Post>> call, Response<List<Post>> response) {
+                if(!response.isSuccessful()){
+                    mMainDisplay.setText("Code: " + response.code());
+                    return;
+                }
+
+                List<Post> posts = response.body();
+
+                for(Post post : posts){
+                    String content = "";
+                    content += "ID: " + post.getId() + "\n";
+                    content += "User ID: " + post.getUserId() + "\n";
+                    content += "Title: " + post.getTitle() + "\n";
+                    content += "Text: " + post.getText() + "\n\n";
+                    mMainDisplay.append(content);
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<List<Post>> call, Throwable t) {
+                mMainDisplay.setText(t.getMessage());
+            }
+        });
     }
 
     private void wireUpDisplay(){
@@ -71,12 +154,7 @@ public class MainActivity extends AppCompatActivity {
         mJsonPlaceHolderAPI = mRetrofit.create(JsonPlaceHolderAPI.class);
 
         mLogoutBtn = findViewById(R.id.logoutBtn);
-        mLogoutBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                logoutUser();
-            }
-        });
+        mLogoutBtn.setOnClickListener(v -> logoutUser());
     }
 
     private void checkForUser(){
@@ -142,30 +220,8 @@ public class MainActivity extends AppCompatActivity {
 
     private void clearUserFromIntent(){ getIntent().putExtra(USER_ID_KEY, -1); }
 
-    private void refreshDisplay(){
+    private void refreshWelcome(){
         mWelcomeText.setText("Welcome " + mUser.getUsername());
-
-        Call<List<Post>> call = mJsonPlaceHolderAPI.getAllPosts();
-
-
-
-
-
-
-//        if(mGymLogs.size() <= 0){
-//            mMainDisplay.setText(R.string.noLogsMessage);
-//            return;
-//        }
-//
-//        StringBuilder sb = new StringBuilder();
-//        for(GymLog log : mGymLogs){
-//            sb.append(log);
-//            sb.append("\n");
-//            sb.append("=-=-=-=-=-=-=-=-=");
-//            sb.append("\n");
-//        }
-//        mMainDisplay.setText(sb.toString());
-
     }
 
     private void getDatabase(){
@@ -179,6 +235,8 @@ public class MainActivity extends AppCompatActivity {
         snackBar.show();
     }
 
+    // Make a test for this and check if the extra value is present
+    // if(intent.getExtra() == int) passes
     public static Intent intentFactory(Context context, int userId){
         Intent intent = new Intent(context, MainActivity.class);
         intent.putExtra(USER_ID_KEY, userId);

@@ -6,44 +6,47 @@ import com.google.gson.annotations.SerializedName;
 public class Post {
 
     private int userId;
-    @SerializedName("id")
-    private int postId;
+    private int id;
     private String title;
     @SerializedName("body")
     private String text;
 
-    public Post(int userId, int postId, String title, String body) {
+    public Post(int userId, int id, String title, String text) {
         this.userId = userId;
-        this.postId = postId;
+        this.id = id;
         this.title = title;
-        this.text = body;
+        this.text = text;
     }
 
     public int getUserId() {
         return userId;
     }
+
     public void setUserId(int userId) {
         this.userId = userId;
     }
 
-    public int getPostId() {
-        return postId;
+    public int getId() {
+        return id;
     }
-    public void setPostId(int postId) {
-        this.postId = postId;
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getTitle() {
         return title;
     }
+
     public void setTitle(String title) {
         this.title = title;
     }
 
-    public String getBody() {
+    public String getText() {
         return text;
     }
-    public void setBody(String body) {
-        this.text = body;
+
+    public void setText(String text) {
+        this.text = text;
     }
 }
