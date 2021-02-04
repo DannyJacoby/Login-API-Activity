@@ -14,4 +14,5 @@
     <string name="login">Login</string>
     <string name="replacementRes">Welcome </string>
     <string name="logoutBtnRes">Logout</string>
+    <string name="mainDisplayRes">Main Display</string>
 </resources>
