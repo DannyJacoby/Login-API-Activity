@@ -37,7 +37,6 @@ public class MainActivity extends AppCompatActivity {
     private Button mLogoutBtn;
 
     private Retrofit mRetrofit;
-    private JsonPlaceHolderAPI mJsonPlaceHolderAPI;
 
     private User mUser;
     private UserDAO mUserDAO;
@@ -109,13 +108,6 @@ public class MainActivity extends AppCompatActivity {
         mMainDisplay = findViewById(R.id.mainDisplay);
         mMainDisplay.setMovementMethod(new ScrollingMovementMethod());
 
-        mRetrofit = new Retrofit.Builder()
-                .baseUrl("https://jsonplaceholder.typicode.com/")
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-
-        mJsonPlaceHolderAPI = mRetrofit.create(JsonPlaceHolderAPI.class);
-
         mLogoutBtn = findViewById(R.id.logoutBtn);
         mLogoutBtn.setOnClickListener(v -> logoutUser());
     }
@@ -134,8 +126,9 @@ public class MainActivity extends AppCompatActivity {
 
         if(users.size() <= 0){
             User dinUser = new User("din_djarin", "baby_yoda_ftw");
+            User defaultUser = new User("default", "default");
             if(dinUser.getUserId() != 1){ dinUser.setUserId(1); }
-            mUserDAO.insert(dinUser);
+            mUserDAO.insert(dinUser, defaultUser);
         }
 
         // Go to Login Screen
