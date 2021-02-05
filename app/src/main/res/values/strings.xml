@@ -14,5 +14,5 @@
     <string name="login">Login</string>
     <string name="replacementRes">Welcome </string>
     <string name="logoutBtnRes">Logout</string>
-    <string name="mainDisplayRes">Main Display</string>
+    <string name="mainDisplayRes">If you are seeing this, logout and then log back in. API call glitched out</string>
 </resources>

@@ -44,6 +44,8 @@ public class MainActivity extends AppCompatActivity {
 
     private SharedPreferences mPreferences = null;
 
+    private List<Post> mPosts;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,7 +58,7 @@ public class MainActivity extends AppCompatActivity {
 
         loginUser(mUserId);
 
-        if(mUserId != -1){
+        if(mUser != null){
             refreshWelcome();
             callAllPosts();
         }
@@ -82,7 +84,8 @@ public class MainActivity extends AppCompatActivity {
                 }
 
                 List<Post> posts = response.body();
-
+                mPosts = posts;
+                mMainDisplay.setText("");
                 for(Post post : posts){
                     if(post.getUserId() == mUser.getUserId()){
                         String content = "";
