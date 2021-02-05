@@ -7,6 +7,8 @@ import androidx.room.PrimaryKey;
 
 import com.example.loginactivity.db.AppDatabase;
 
+import java.util.Objects;
+
 @Entity(tableName = "user_table")
 public class User {
 
@@ -21,7 +23,6 @@ public class User {
                 this.mUsername = mUsername;
                 this.mPassword = mPassword;
         }
-
 
         public int getUserId() {
                 return mUserId;
@@ -45,5 +46,19 @@ public class User {
 
         public void setPassword(String mPassword) {
                 this.mPassword = mPassword;
+        }
+
+        @Override
+        public boolean equals(Object o) {
+                if (this == o) return true;
+                if (o == null || getClass() != o.getClass()) return false;
+                User user = (User) o;
+                return mUsername.equals(user.mUsername) &&
+                        mPassword.equals(user.mPassword);
+        }
+
+        @Override
+        public int hashCode() {
+                return Objects.hash(mUsername, mPassword);
         }
 }

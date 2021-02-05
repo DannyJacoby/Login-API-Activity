@@ -52,7 +52,8 @@ public class LoginActivity extends AppCompatActivity {
                     Intent intent = MainActivity.intentFactory(getApplicationContext(), mUser.getUserId());
                     startActivity(intent);
                 } else {
-                   Toast.makeText(LoginActivity.this, "Invalid Password", Toast.LENGTH_LONG).show();
+                   //Toast.makeText(LoginActivity.this, "Invalid Password", Toast.LENGTH_LONG).show();
+                   mPasswordField.setError("Invalid Password");
                 }
             }
         });
@@ -72,20 +73,20 @@ public class LoginActivity extends AppCompatActivity {
         }
 
         if(mUser == null){
-            Toast.makeText(this, "No user " + mUsernameString + " with password " + mPasswordString +" found", Toast.LENGTH_LONG).show();
+            //Toast.makeText(this, "No user " + mUsernameString + " with password " + mPasswordString +" found", Toast.LENGTH_LONG).show();
+            mUsernameField.setError("Invalid Username");
             return false;
         }
         return true;
     }
 
-    private boolean validatePassword(){ return mUser.getPassword().equals(mPasswordString);    }
+    private boolean validatePassword(){ return mUser.getPassword().equals(mPasswordString); }
 
     private void getDatabase(){
         mUserDAO = Room.databaseBuilder(this, AppDatabase.class, AppDatabase.USER_TABLE)
                 .allowMainThreadQueries()
                 .build()
                 .getUserDAO();
-
     }
 
     public static Intent intentFactory(Context context){

@@ -60,47 +60,8 @@ public class MainActivity extends AppCompatActivity {
         if(mUserId != -1){
             refreshWelcome();
             callAllPosts();
-//            callAllPostsByPostsId();
         }
 
-    }
-
-    private void callAllPostsByPostsId(){
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("https://jsonplaceholder.typicode.com/")
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-
-        JsonPlaceHolderAPI jsonPlaceHolderAPI = retrofit.create(JsonPlaceHolderAPI.class);
-
-        Call<List<Post>> call = jsonPlaceHolderAPI.getPostsByPostId(mUserId);
-
-        call.enqueue(new Callback<List<Post>>() {
-            @Override
-            public void onResponse(Call<List<Post>> call, Response<List<Post>> response) {
-                if(!response.isSuccessful()){
-                    mMainDisplay.setText("Code: " + response.code());
-                    return;
-                }
-
-                List<Post> posts = response.body();
-
-                for(Post post : posts){
-                    String content = "";
-                    content += "ID: " + post.getId() + "\n";
-                    content += "User ID: " + post.getUserId() + "\n";
-                    content += "Title: " + post.getTitle() + "\n";
-                    content += "Text: " + post.getText() + "\n\n";
-                    mMainDisplay.append(content);
-                }
-
-            }
-
-            @Override
-            public void onFailure(Call<List<Post>> call, Throwable t) {
-                mMainDisplay.setText(t.getMessage());
-            }
-        });
     }
 
     private void callAllPosts(){
@@ -124,12 +85,14 @@ public class MainActivity extends AppCompatActivity {
                 List<Post> posts = response.body();
 
                 for(Post post : posts){
-                    String content = "";
-                    content += "ID: " + post.getId() + "\n";
-                    content += "User ID: " + post.getUserId() + "\n";
-                    content += "Title: " + post.getTitle() + "\n";
-                    content += "Text: " + post.getText() + "\n\n";
-                    mMainDisplay.append(content);
+                    if(post.getUserId() == mUser.getUserId()){
+                        String content = "";
+                        content += "ID: " + post.getId() + "\n";
+                        content += "User ID: " + post.getUserId() + "\n";
+                        content += "Title: " + post.getTitle() + "\n";
+                        content += "Text: " + post.getText() + "\n\n";
+                        mMainDisplay.append(content);
+                    }
                 }
 
             }
@@ -171,9 +134,8 @@ public class MainActivity extends AppCompatActivity {
 
         if(users.size() <= 0){
             User dinUser = new User("din_djarin", "baby_yoda_ftw");
-            User defaultUser = new User("default", "default");
-            User altUser = new User("alt", "alt");
-            mUserDAO.insert(dinUser, defaultUser, altUser);
+            if(dinUser.getUserId() != 1){ dinUser.setUserId(1); }
+            mUserDAO.insert(dinUser);
         }
 
         // Go to Login Screen

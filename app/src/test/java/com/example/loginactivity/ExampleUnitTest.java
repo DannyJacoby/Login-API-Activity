@@ -14,4 +14,16 @@ public class ExampleUnitTest {
     public void addition_isCorrect() {
         assertEquals(4, 2 + 2);
     }
+
+    // Test if an extra has been put into the intent
+
+    // Test if default users have been auto generated
+
+    // Test if the logic behind function "checkForUsers" in main is correct
+
+    // Test if the logic behind function "checkForUsers" in login is correct
+
+    // Test if the logic behind function "validatePassword" in login is correct
+    
+
 }

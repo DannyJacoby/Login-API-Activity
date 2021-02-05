@@ -12,6 +12,7 @@ import com.example.loginactivity.db.typeConverters.DateTypeConverter;
 @Database(entities = {User.class}, version = 1)
 public abstract class AppDatabase extends RoomDatabase{
 
+    public static final String DB_NAME = "db_name";
     public static final String USER_TABLE = "user_table";
     public abstract UserDAO getUserDAO();
 

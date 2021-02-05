@@ -10,7 +10,4 @@ public interface JsonPlaceHolderAPI {
     @GET("posts")
     Call<List<Post>> getAllPosts();
 
-    @GET("comments?postId={userId}")
-    Call<List<Post>> getPostsByPostId(int postId);
-
 }
